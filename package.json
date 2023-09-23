@@ -1,0 +1,27 @@
+{
+  "name": "poc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsnd dotenv/config --respawn --inspect=9226 src/index",
+    "dev": "nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.6.3",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.23.2",
+    "fastify-plugin": "^4.5.1",
+    "mongoose": "^7.5.2",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0"
+  }
+}
