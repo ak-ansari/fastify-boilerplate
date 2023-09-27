@@ -4,16 +4,19 @@ import { DBConnectionService } from "./db/db";
 import { PluginRegistry } from "./services/plugin-registry";
 const envConfig = env.config();
 
-const app = fastify({logger: true});
+const app = fastify({logger: false});
 const _pluginRegistry = new PluginRegistry();
 _pluginRegistry.register(app)
 const PORT = (process.env.PORT as unknown as number) || 5000;
-const mongoURI = process.env.MONGO_URI;
+app.addHook("onRequest",(req, res, next)=>{
+  (global as any).requestContext = {userInfo: {_id:"650ed6975bd5ce757b7f6fbc"}}
+  next()
+})
 
 
 const start = async () => {
   try {
-    const dbService = new DBConnectionService();
+    const dbService = new DBConnectionService(); 
     await dbService.connect();
     app.listen({ port: PORT }, (err) => {
         if (err) {

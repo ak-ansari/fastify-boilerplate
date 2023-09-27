@@ -10,5 +10,19 @@ export default plugin((server: FastifyInstance, opts: FastifyPluginOptions,next:
             await _userController.addUser(server, req, reply);
         }
     }),
+    server.route({
+        method: "PATCH",
+        url:"/api/update-user",
+        handler: async (req: FastifyRequest, reply: FastifyReply)=>{
+            await _userController.updateUser(server, req, reply);
+        }
+    }),
+    server.route({
+        method: "DELETE",
+        url:"/api/delete-user/:id",
+        handler: async (req: FastifyRequest, reply: FastifyReply)=>{
+            await _userController.deleteUser(server, req, reply);
+        }
+    }),
     next()
 })
