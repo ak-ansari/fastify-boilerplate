@@ -7,8 +7,11 @@ const _plugin = AuditLogPlugin.Instance
 export const userSchema = new Schema({
     userName: Schema.Types.Mixed, homeCity: String
 },{versionKey: false, timestamps: true})
-.pre("save",_plugin.logChangesForNewDoc())
-.post( new RegExp("update","gi"), _plugin.logChangesForOldDoc())
+.pre("save",_plugin.logChangesSaveDoc())
+.pre( /\b(?!updateMany\b)\w*update\w*/gi, _plugin.setOldDoc())
+.pre( /updateMany/gi, _plugin.setOldDocsMany())
+.post( /\b(?!updateMany\b)\w*update\w*/gi, _plugin.logChangesForUpdateSingleDoc())
+.post( /updateMany/gi, _plugin.logChangesForUpdateMany())
 .pre( new RegExp("delete","gi"), _plugin.logDocumentDeletion())
 
 export const User = model<IUser>("user",userSchema);

@@ -1,6 +1,6 @@
 import { cloneDeep } from "lodash";
 import { IChangeLog } from "../../../interface";
-
+import moment from "moment";
 export class AuditLogPluginHelper {
   /** ################################  resolve . separated path  ##################################### */
   public static resolvePath(
@@ -392,9 +392,7 @@ export class AuditLogPluginHelper {
   public static detectChanges(originalVal: any, newVal: any): boolean {
     if (typeof originalVal !== typeof newVal) {
       return true;
-    }
-
-    if (
+    } else if (
       typeof originalVal === "object" &&
       originalVal !== null &&
       newVal !== null
@@ -409,6 +407,13 @@ export class AuditLogPluginHelper {
             return true;
           }
         }
+      } else if (
+        typeof originalVal === "object" &&
+        originalVal instanceof Date
+      ) {
+        const originalDate = moment(originalVal);
+        const newDate = moment(newVal);
+        return !originalDate.isSame(newDate);
       } else if (typeof originalVal === "object") {
         const keys = new Set([
           ...Object.keys(originalVal),
@@ -422,12 +427,13 @@ export class AuditLogPluginHelper {
           }
         }
       }
-    }
-
-    if (originalVal !== newVal) {
+    } else if (originalVal !== newVal) {
       return true;
     }
 
     return false;
+  }
+  public static get skipKeys(): string[] {
+    return ["_id", "createdAt", "__v"];
   }
 }

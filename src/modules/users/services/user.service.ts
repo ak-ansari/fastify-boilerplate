@@ -9,9 +9,9 @@ export class UserService {
       throw error;
     }
   }
-  public async updateUser(newDoc: IUser): Promise<IUser| null> {
+  public async updateUser(newDoc: IUser): Promise<any> {
     try {
-      return await User.findOneAndUpdate({_id: newDoc._id}, {$push: {"userName.name.last": newDoc.userName},$set:{homeCity:"kota"}});
+      return await User.updateOne({homeCity:"kota"},{$set:{homeCity:"bundi"}},{new:true});
     } catch (error) {
       throw error;
     }

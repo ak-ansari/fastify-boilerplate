@@ -1,7 +1,7 @@
 import { Document, Types} from "mongoose";
 
 export interface IAuditLog extends Document {
-    user: Types.ObjectId,
+    userId: Types.ObjectId,
     userName: string
     action: string,
     collectionName: string,
