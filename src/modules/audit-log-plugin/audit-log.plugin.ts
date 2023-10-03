@@ -14,16 +14,28 @@ export class AuditLogPlugin {
     return this._instance ? this._instance : (this._instance = new this());
   }
   /** ################################  Method to log details for new document  ##################################### */
+  /**
+   * Method to log details for new document 
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPlugin
+   * @returns {PreSaveMiddlewareFunction}
+   */
+  
+  
   public logChangesSaveDoc(): PreSaveMiddlewareFunction {
     return function (next) {
-      let collectionName: string; // Get the collection name dynamically
-      collectionName = this.constructor.collection.name;
+      const collectionName = this.constructor.collection.name;
+      // get user info from request context variable saved earlier in common middleware 
       const userInfo = (global as any).requestContext?.userInfo;
       const log = new Audit({
-        userId: userInfo._id, // Replace with the actual user ID
+        userId: userInfo._id,
+        userName: userInfo.userName,
         docId: this._doc._id,
         action: "save",
-        collectionName, // Add collectionName to the audit log
+        collectionName, // name of current collection
         details: this._doc,
       });
 
@@ -33,18 +45,28 @@ export class AuditLogPlugin {
     };
   }
 
+
+  /**
+   * Method to log details on insertion of many documents in one go 
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPlugin
+   * @returns {PostMiddlewareFunction}
+   */
   public logChangesForInsertMany(): PostMiddlewareFunction {
     return async function (docs: any, next) {
-      let collectionName: string; // Get the collection name dynamically
-      collectionName = this.collection.collectionName;
+      const collectionName= this.collection.collectionName;
       const userInfo = (global as any).requestContext?.userInfo;
       const auditArr = []
       for (const doc of docs) {
         const log = {
-          userId: userInfo._id, // Replace with the actual user ID
+          userId: userInfo._id,
+          userName: userInfo.userName,
           docId: doc._id,
           action: "save",
-          collectionName, // Add collectionName to the audit log
+          collectionName,
           details: doc,
         };
 
@@ -94,10 +116,11 @@ export class AuditLogPlugin {
       }
 
       const log = new Audit({
-        userId: userInfo._id, // Replace with the actual user ID
+        userId: userInfo._id,
+        userName: userInfo.userName,
         docId: doc._id,
         action: "update",
-        collectionName, // Add collectionName to the audit log
+        collectionName, 
         details: changes,
       });
 
@@ -107,6 +130,15 @@ export class AuditLogPlugin {
     };
   }
 
+  /**
+   * Method to log details on update of may documents
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPlugin
+   * @returns {PostMiddlewareFunction}
+   */
   public logChangesForUpdateMany(): PostMiddlewareFunction {
     return async function (
       this: any,
@@ -140,10 +172,11 @@ export class AuditLogPlugin {
             };
         }
         const log = {
-          userId: userInfo._id, // Replace with the actual user ID
+          userId: userInfo._id, 
+          userName: userInfo.userName,
           docId: newDoc._id,
           action: "update",
-          collectionName, // Add collectionName to the audit log
+          collectionName,
           details: changes,
         };
         AuditArr.push(log as any);
@@ -154,6 +187,15 @@ export class AuditLogPlugin {
   }
 
   /** ################################  Method to log details on delete of any document  ##################################### */
+  /**
+   *  Method to log details on delete of any document
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPlugin
+   * @returns {PreSaveMiddlewareFunction}
+   */
   public logDocumentDeletion(): PreSaveMiddlewareFunction {
     return async function (this: any, next: () => void) {
       const collectionName = this._collection.collectionName;
@@ -163,10 +205,11 @@ export class AuditLogPlugin {
         const originalDoc = await this.model.findOne(this.getFilter());
 
         const log = new Audit({
-          userId: userInfo._id, // Replace with the actual user ID
+          userId: userInfo._id,
+          userName: userInfo.userName,
           docId: originalDoc._id,
           action: "delete",
-          collectionName, // Add collectionName to the audit log
+          collectionName,
           details: originalDoc,
         });
 
@@ -178,6 +221,15 @@ export class AuditLogPlugin {
       next();
     };
   }
+  /**
+   *  get original form of document and set that as _oldDoc in schema for further use
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPlugin
+   * @returns {PreSaveMiddlewareFunction}
+   */
   setOldDoc(): PreSaveMiddlewareFunction {
     return async function (next): Promise<any> {
       try {
@@ -188,6 +240,15 @@ export class AuditLogPlugin {
       }
     };
   }
+  /**
+   *  get original form of documents and set that as _oldDocs in schema for further use
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPlugin
+   * @returns {PreSaveMiddlewareFunction}
+   */
   setOldDocsMany(): PreSaveMiddlewareFunction {
     return async function (next): Promise<any> {
       try {

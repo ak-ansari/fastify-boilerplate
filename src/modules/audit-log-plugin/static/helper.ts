@@ -3,6 +3,19 @@ import { IChangeLog } from "../../../interface";
 import moment from "moment";
 export class AuditLogPluginHelper {
   /** ################################  resolve . separated path  ##################################### */
+  /**
+   * Resolves the path if path is provided in . separated string
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPluginHelper
+   * @param {string} path
+   * @param {any} originalDoc
+   * @param {any} newVal
+   * @param {string} operator
+   * @returns { Object<newValue: any; path: string> }
+   */
   public static resolvePath(
     path: string,
     originalDoc: any,
@@ -29,6 +42,15 @@ export class AuditLogPluginHelper {
   }
 
   /** ################################  get new value by operator applied  ##################################### */
+  /**
+   * get new value by operator applied 
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPluginHelper
+   * @returns {PostMiddlewareFunction}
+   */
   public static getNewValByOperator(
     operator: string,
     newVal: any,
@@ -93,6 +115,16 @@ export class AuditLogPluginHelper {
     return originalDocument;
   }
   /** ################################  to get a single object of nested values  ##################################### */
+  /**
+   * to get a single object of nested values
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPluginHelper
+   * @param {Record<string, any>} obj
+   * @returns {Record<string, any>}
+   */
   public static flatten(obj: Record<string, any>): Record<string, any> {
     let newObj: Record<string, any> = { ...obj };
     for (const key in obj) {
@@ -106,6 +138,17 @@ export class AuditLogPluginHelper {
   }
 
   /** ################################  get updated document  ##################################### */
+  /**
+   * get updated document 
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPluginHelper
+   * @param {Record<string, any>} originalDocument
+   * @param {Record<string, any>} update
+   * @returns {Record<string, any>}
+   */
   public static getUpdatedDoc(
     originalDocument: Record<string, any>,
     update: Record<string, any>
@@ -370,6 +413,19 @@ export class AuditLogPluginHelper {
   }
 
   /** ################################  generate change log object to save in db  ##################################### */
+  /**
+   * generate change log object to save in db
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPluginHelper
+   * @param {any} newValue
+   * @param {any} oldValue
+   * @param {string} operator
+   * @param {string} stack
+   * @returns {IChangeLog}
+   */
   public static getChangeLog(
     newValue: any,
     oldValue: any,
@@ -389,6 +445,17 @@ export class AuditLogPluginHelper {
     return doc;
   }
   /** ################################  to detect changed properties  ##################################### */
+  /**
+   * to detect changed properties
+   * 
+   * @access public
+   * @since 2.9.1
+   * @author Abdul Karim Ansari
+   * @memberof AuditLogPluginHelper
+   * @param {any} originalVal
+   * @param {any} newVal
+   * @returns {boolean}
+   */
   public static detectChanges(originalVal: any, newVal: any): boolean {
     if (typeof originalVal !== typeof newVal) {
       return true;
