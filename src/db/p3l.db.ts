@@ -5,7 +5,7 @@ type mongoMethod = "find" | "findOne";
 
 export class P3LDbService {
   public p3lMongoUri: string;
-  private password = encodeURIComponent("re33Z77q#mPj![1");
+  private password = encodeURIComponent(process.env.P3L_MONGO_PASS);
   private client!: MongoClient;
   private db!: Db;
   private static _instance: P3LDbService;
