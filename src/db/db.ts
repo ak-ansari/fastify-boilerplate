@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import { P3LDbService } from "./p3l.db";
 export class DBConnectionService {
   private mongoUri = process.env.MONGO_URI as string;
 
   public async connect() {
-    await mongoose.connect(this.mongoUri);
-    const db = this.mongoUri.split(".net/")[1]
-    console.log(`DB connection stabilized successfully for DATABASE: ${db}`)
+    const database = "p3l_dev"
+    // await mongoose.connect(P3LDbService.Instance.p3lMongoUri);
+    // console.log(`DB connection stabilized successfully for DATABASE: ${database}`)
   }
 }
